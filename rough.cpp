@@ -1,5 +1,7 @@
 #include<iostream>
 #include<unordered_map>
+#include<utility>
+#include<vector>
 
 using namespace std;
 
@@ -11,14 +13,19 @@ struct End{
     End(int *p) : ende(p) {}
 };
 
-int f(int* n){
-    return *n;
+void f(int** n){
+    if(*n){
+        //cout<<**n;
+    }
+    int *c, d;
+    d = 7;
+    c = &d;
+    (*n) = c;
 }
 
 int main(){
-    string c = "abc";
-    string b = "def";
-    string d  = c + b;
-    cout<<d<<endl;
+    vector<pair<int, int>> a;
+    a.push_back({1,1});
+    cout<<a[0].first <<"  "<< a[0].second<<endl;
     return 0;
 }
