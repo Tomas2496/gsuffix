@@ -6,11 +6,15 @@
 int Node::END = -1;
 int Node::rsc = 0;
 ActivePoint Node::ap = ActivePoint();
-const string Node::word = "DOGS$CATS#";
+Node* Node::last_created_node = nullptr;
+string Node::word = "xabxa$babxba$";
+
 
 int main(){
-    //string word = "abbc";
-    //abcabxabcd //cdddcdc //aabaacaad banana$ //dogs$monkey$cats# //xabxa$babxba#
+    //"xabxa$bx$"
+    //"xabxa$babxba$c$deef$deg$"
+    //"abbc";
+    //abcabxabcd //cdddcdc //aabaacaad banana$//
     Node tree = Node();
     tree.add_to_tree();
     return 0;

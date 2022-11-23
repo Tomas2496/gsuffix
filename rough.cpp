@@ -5,13 +5,17 @@
 
 using namespace std;
 
-int E = 0;
-int *e;
-
-struct End{
-    int* ende;
-    End(int *p) : ende(p) {}
+class a{
+    public:
+        static int *index;
+        static string word;
+        static const vector<string> words;
 };
+
+int* a::index = new int(0);
+const vector<string> a::words{"dogs", "cats"};
+//vector<string>::iterator a::word = words.begin();
+
 
 void f(int** n){
     if(*n){
@@ -24,8 +28,9 @@ void f(int** n){
 }
 
 int main(){
-    vector<pair<int, int>> a;
-    a.push_back({1,1});
-    cout<<a[0].first <<"  "<< a[0].second<<endl;
+    a b;
+    cout<<b.word<<endl;
+    b.index+=1;
+    cout<<b.word<<endl;
     return 0;
 }

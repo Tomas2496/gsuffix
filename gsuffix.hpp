@@ -4,7 +4,8 @@
 #include<utility>
 
 class Node;
-//typedef std::pair<int, int> Leaf;
+typedef std::pair<int, int> Leaf;
+typedef std::pair<int , int*> Edge;
 typedef std::unordered_map<char, Node*> Children;
 
 
@@ -21,30 +22,39 @@ class Node {
 
     Children children;  // children nodes
     Node *links;    // suffix link
-    int start; //*end;  
-    int *end;
-    int leaf;
+    Edge edge_label;
+    std::vector<Leaf> leaf;
 
-    bool walk_down();
+
+    Node(Node *link, int s, int* end);
+    int start();
+    int end();
+    void update_start(int new_start);
+    void update_end(int new_end);
+    bool is_root();
+    void reset_active_point();
+    void attach_root();
     bool has_edge(char c);
     int edge_length();
-    void update_suffix_link(Node ** node);
-    void insert_inner_node(Node** lcn, int start, int end, int phase);
-    void adjust_edge_labels();
-    void dfs_leaf(int len);
+    void update_suffix_link();
+    bool walk_down();
+    void add_node(int phase);
+    void insert_inner_node(int start, int end, int phase);
+    void dfs_leaf_edge_label(int len);
     void print_tree(std::string current);
     void run_phase(int phase);
-    
+    static bool handle_case_zero(int phase);
+    static bool handle_case_one(int phase);
+    static void update_active_point(int phase);
 
     public:
+        Node();
+        void add_to_tree();
         static ActivePoint ap;
         static int END;
         static int rsc;
-        static const std::string word;
-        Node();
-        Node(Node *link, int s, int *end);
-        void add_to_tree();
-        static void update_active_point(int phase);
-        void reset_active_point();
-        void attach_root();
+        static Node* last_created_node;
+        static std::string word;
+        
+        
 };
