@@ -47,14 +47,14 @@ class Node {
     static bool handle_case_one(int phase);
     static void update_active_point(int phase);
 
-    public:
-        Node();
-        void add_to_tree();
-        static ActivePoint ap;
-        static int END;
-        static int rsc;
-        static Node* last_created_node;
-        static std::string word;
+public:
+    Node();
+    void add_to_tree();
+    static ActivePoint ap;
+    static int END;
+    static int rsc;
+    static Node* last_created_node;
+    static std::string word;
         
         
 };
