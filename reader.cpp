@@ -18,6 +18,7 @@ std::string Reader::read(){
             std::getline(file, line);
             result+= remove_outputs(line);
         }
+        file.close();
     } 
     else
         std::cout<<"File failed to open\n";
