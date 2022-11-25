@@ -3,7 +3,7 @@
 #include "gsuffix.hpp"
 
 
-#define SEPERATOR '$'
+#define SEPERATOR ' '
 
 
 using namespace std;
