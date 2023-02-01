@@ -16,13 +16,6 @@ class Node {
     typedef std::pair<int , int**> Edge;
     typedef std::map<T, Node<T>*> Children;
 
-    struct ActivePoint {
-        Node<T> *node;
-        int edge; 
-        int length;
-        ActivePoint() : node(nullptr), edge(-1), length(0) {}
-    };
-
 
     Children children;          // children
     Leaf leaf;
@@ -55,11 +48,17 @@ class Node {
     static void update_active_point(int phase);
 
 public:
+    struct ActivePoint {
+        Node<T> *node;
+        int edge; 
+        int length;
+        ActivePoint() : node(nullptr), edge(-1), length(0) {}
+    };
     Node();
     ~Node();
     void print_tree(std::vector<T> current);           //TODO:: Fix the string.
     void add_to_tree();
-    std::vector<T> extract_most_freq_occur_subs(int n);
+    std::vector<T> extract_most_freq_occur_subs(int n, int* frequency);
     void set_occurences_count();
     bool operator == (const Node& other);
     static ActivePoint ap;
@@ -67,7 +66,7 @@ public:
     static int END;
     static int rsc;
     static Node* last_created_node;
-    static std::vector<T> word;    
+    static std::vector<T> word; 
 };
 
 
@@ -312,7 +311,7 @@ void::Node<T>::add_to_tree(){
         this->run_phase(i, ends[current_word]);
         i++;
     }
-    std::cout<<"The rsc is "<<rsc<<std::endl;
+    //std::cout<<"The rsc is "<<rsc<<std::endl;
     this->dfs_leaf_edge_label(0);         // for the last word.
     for(auto x : ends)                    // free allocated memory
         delete x;
@@ -370,10 +369,9 @@ void Node<T>::set_occurences_count(){
 
 
 template<typename T>
-std::vector<T> Node<T>::extract_most_freq_occur_subs(int n){
-    int most_freq = 0;
+std::vector<T> Node<T>::extract_most_freq_occur_subs(int n, int* frequency){
     std::set<std::pair<int, int>> subs;
-    this->get_substrings(subs, 0, &most_freq, n);
+    this->get_substrings(subs, 0, frequency, n);
     std::vector<T> temp;
     bool first = true;
     for(auto [start, len] : subs){
@@ -382,7 +380,7 @@ std::vector<T> Node<T>::extract_most_freq_occur_subs(int n){
         temp.insert(_it, word.begin() + start, word.begin() + start + len);
         temp.push_back(SEPERATOR);
     }
-    std::cout<<most_freq<<"  "<<subs.size()<<"  "<<n<<std::endl;
+    temp.pop_back();      // remove last sepr.
     return temp;
 }
 
