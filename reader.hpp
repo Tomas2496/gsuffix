@@ -3,18 +3,19 @@
 #include<string>
 #include<unordered_map>
 
+const std::string SEPERATOR =  "$";
 
 class Reader {
     std::string filename;
-    int input_size;
     uint16_t next_numbr;
-    std::string read();
-    std::string remove_outputs(std::string);
-    void make_dictionary();
-    void add_words(std::string, int size);
+    std::vector<std::string> input;
+    void read();
+    void add_input(std::string line);
+    void make_dictionary_and_add_words();
     void start();
 
 public:
+    Reader();
     Reader(std::string name);
     std::vector<uint16_t> words;
     std::unordered_map<std::string, uint16_t> dictionary;
