@@ -19,7 +19,7 @@ You can invoke the program as follows:
 >> > ./gsuffix.out ./traces/sample.traces
 >> # Find subsequences of minimum length 2.
 >> > n 2
->> # Outputs will be printed here.
+>> # Outputs will be printed here, followed by a `DONE`.
 >> # Use `q` to quit the program.
 >> > q
 ```
@@ -34,6 +34,7 @@ Enclosed with angle brackets are variables.
 2 a b x 
 2 b x 
 2 b a
+DONE
 >> q
 ```
 

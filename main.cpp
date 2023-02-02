@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
       std::cin >> length;
       int min_len = std::stoi(length);
       print_substrings(min_len);
+      std::cout << "DONE" << std::endl;
     } else if (command == "q")
       break;
     else {
