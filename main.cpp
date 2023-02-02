@@ -19,12 +19,10 @@ void build_tree(std::string file_path) {
   tree.set_occurences_count();
 }
 
-void print_substrings() {
-  std::string input;
-  std::cin >> input;
+void print_substrings(int min_len) {
   int frequency = 0;
   std::vector<uint16_t> result =
-      tree.extract_most_freq_occur_subs(stoi(input), &frequency);
+      tree.extract_most_freq_occur_subs(min_len, &frequency);
   std::vector<std::string> orig = reader.map_to_original(result);
   std::cout << frequency << " ";
   for (auto x : orig) {
@@ -61,7 +59,10 @@ int main(int argc, char *argv[]) {
     std::string command;
     std::cin >> command;
     if (command == "n") {
-      print_substrings();
+      std::string length;
+      std::cin >> length;
+      int min_len = std::stoi(length);
+      print_substrings(min_len);
     } else if (command == "q")
       break;
     else {
