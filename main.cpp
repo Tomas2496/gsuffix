@@ -11,10 +11,8 @@ template <typename T> std::vector<T> Node<T>::word = {};
 Node<uint16_t> tree = Node<uint16_t>();
 Reader reader;
 
-void build_tree() {
-  std::string input;
-  std::cin >> input;
-  reader = Reader(input);
+void build_tree(std::string file_path) {
+  reader = Reader(file_path);
   Node<uint16_t>::word = reader.words;
   tree.add_to_tree();
   // tree.print_tree({});      //uncomment to print tree
@@ -39,7 +37,7 @@ void print_substrings() {
   std::cout << std::endl;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
   // TEST EXAMPLES
   // nonsense$sense$
   //"xabxa$bx$"
@@ -49,22 +47,26 @@ int main() {
   // abcabxabcd //cdddcdc //aabaacaad banana$//
 
   std::string commands = "The following commands are available\n"
-                         "f <path to trace>       build tree\n"
                          "n <minimum length for substrings>      prints "
                          "frequency-substring on console\n"
                          "q    quit\n";
 
+  if (argc != 2) {
+    std::cout << "Please provide a path to the traces file\n";
+    return -1;
+  }
+  std::string file_path = argv[1];
+  build_tree(file_path);
   while (1) {
-    std::string command, input;
+    std::string command;
     std::cin >> command;
-    if (command == "f") {
-      build_tree();
-    } else if (command == "n") {
+    if (command == "n") {
       print_substrings();
     } else if (command == "q")
       break;
-    else
+    else {
       std::cout << commands;
+    }
   }
   return 0;
 }
