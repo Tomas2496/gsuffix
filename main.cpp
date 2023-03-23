@@ -13,14 +13,13 @@ Node<uint16_t> tree = Node<uint16_t>();
 Reader reader;
 
 
-void build_tree(){
-    std::string input;
-    std::cin>>input;
-    reader = Reader(input);
+void build_tree(std::string filename){
+    reader = Reader(filename);
     Node<uint16_t>::word = reader.words;
     tree.add_to_tree();
     //tree.print_tree({});      //uncomment to print tree
     tree.set_occurences_count();
+    //std::cout<<"Tree built\n";
 }
 
 
@@ -29,6 +28,10 @@ void print_substrings(){
     std::cin>>input;
     int frequency = 0;
     std::vector<uint16_t> result = tree.extract_most_freq_occur_subs(stoi(input), &frequency);
+    if(frequency==0){
+        std::cout<<"0 \nDONE\n";
+        return;
+    }
     std::vector<std::string> orig = reader.map_to_original(result);
     std::cout<<frequency<<" ";
     for(auto x : orig){
@@ -38,11 +41,11 @@ void print_substrings(){
         }
         std::cout<<x<<" ";   
     }
-    std::cout<<std::endl;
+    std::cout<<"\nDONE\n";
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
     //TEST EXAMPLES
     //nonsense$sense$
     //"xabxa$bx$"
@@ -55,13 +58,16 @@ int main(){
                             "f <path to trace>       build tree\n" 
                             "n <minimum length for substrings>      prints frequency-substring on console\n"
                             "q    quit\n";
-
+    if(argc != 2){
+        std::cout<<"Provide two arguments please\n";
+        return -1;
+    }
+    std::string filename = argv[1];
+    build_tree(filename);
     while(1){
         std::string command, input ;
         std::cin>>command;
-        if(command == "f"){
-            build_tree();
-        } else if(command == "n"){
+        if(command == "n"){
             print_substrings();
         } else if(command == "q")
             break;
