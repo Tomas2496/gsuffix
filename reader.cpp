@@ -67,9 +67,13 @@ void Reader::start() {
   make_dictionary_and_add_words();
 }
 
-std::vector<std::string> Reader::map_to_original(std::vector<uint16_t> word) {
+void Reader::print_original(std::set<FrequentSub, Node<uint16_t>::cmp> words) {
   std::vector<std::string> result;
-  for (uint16_t x : word)
-    result.push_back(ref[x]);
-  return result;
+  for(auto [word, fr] : words){
+    std::cout<<fr<<" ";
+    for (uint16_t x : word){
+      std::cout<<ref[x]<<" ";
+    }
+    std::cout<<std::endl;
+  }
 }
