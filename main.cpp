@@ -1,6 +1,7 @@
 #include "gsuffix.hpp"
 #include "reader.hpp"
 
+
 template <typename T> int Node<T>::END = -1;
 template <typename T> T Node<T>::SEPERATOR = 0U;
 template <typename T> int Node<T>::rsc = 0;
@@ -15,24 +16,15 @@ void build_tree(std::string file_path) {
   reader = Reader(file_path);
   Node<uint16_t>::word = reader.words;
   tree.add_to_tree();
-  // tree.print_tree({});      //uncomment to print tree
+  //tree.print_tree({});      //uncomment to print tree
   tree.set_occurences_count();
 }
 
 void print_substrings(int min_len) {
   int frequency = 0;
-  std::vector<uint16_t> result =
+  std::set<FrequentSub, Node<uint16_t>::cmp> result =
       tree.extract_most_freq_occur_subs(min_len, &frequency);
-  std::vector<std::string> orig = reader.map_to_original(result);
-  std::cout << frequency << " ";
-  for (auto x : orig) {
-    if (x == "$") {
-      std::cout << std::endl << frequency << " ";
-      continue;
-    }
-    std::cout << x << " ";
-  }
-  std::cout << std::endl;
+  reader.print_original(result);
 }
 
 int main(int argc, char *argv[]) {

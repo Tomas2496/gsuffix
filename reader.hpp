@@ -3,8 +3,12 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <set>
+#include "gsuffix.hpp"
 
 const std::string SEPERATOR = "$";
+typedef std::pair<std::vector<uint16_t>, int> FrequentSub;
+
 
 class Reader {
   std::string filename;
@@ -21,5 +25,5 @@ public:
   std::vector<uint16_t> words;
   std::unordered_map<std::string, uint16_t> dictionary;
   std::unordered_map<uint16_t, std::string> ref;
-  std::vector<std::string> map_to_original(const std::vector<uint16_t> word);
+  void print_original(const std::set<FrequentSub, Node<uint16_t>::cmp> words);
 };

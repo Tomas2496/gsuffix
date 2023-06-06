@@ -12,6 +12,8 @@ template <typename T> class Node {
   typedef std::unordered_map<int, Leaf> Leaves;
   typedef std::pair<int, int **> Edge;
   typedef std::map<T, Node<T> *> Children;
+  typedef std::pair<std::pair<int, int>, int> Substring;
+  typedef std::pair<std::vector<T>, int> FrequentSub;
 
   Children children; // children
   Leaf leaf;
@@ -37,13 +39,18 @@ template <typename T> class Node {
   void insert_inner_node(int start, int end, int phase, int **new_leaf_end);
   void dfs_leaf_edge_label(int len);
   void run_phase(int phase, int **end);
-  void get_substrings(std::set<std::pair<int, int>> &subs, int string_dept,
+  void get_substrings(std::set<Substring> &subs, int string_dept,
                       int *most_frequent, int minimum);
   static bool handle_case_zero(int phase);
   static bool handle_case_one(int phase);
   static void update_active_point(int phase);
 
 public:
+  struct cmp {
+    constexpr bool operator()(const FrequentSub &lhs, const FrequentSub &rhs) const {
+      return std::less<std::vector<T>>{}(lhs.first, rhs.first);
+    }
+  };
   struct ActivePoint {
     Node<T> *node;
     int edge;
@@ -54,7 +61,7 @@ public:
   ~Node();
   void print_tree(std::vector<T> current); // TODO:: Fix the string.
   void add_to_tree();
-  std::vector<T> extract_most_freq_occur_subs(int n, int *frequency);
+  std::set<std::pair<std::vector<T>, int>, Node<T>::cmp> extract_most_freq_occur_subs(int n, int *frequency);
   void set_occurences_count();
   bool operator==(const Node &other);
   static ActivePoint ap;
@@ -206,7 +213,7 @@ template <typename T> void Node<T>::print_tree(std::vector<T> current) {
   if (!this->is_leaf())
     return;
   for (auto x : current)
-    std::cout << x;
+    std::cout << x <<" | ";
   std::cout << "   " << this->leaf.first << "-" << this->edge_end << std::endl;
 }
 
@@ -313,38 +320,47 @@ template <typename T> void Node<T>::set_occurences_count() {
 }
 
 template <typename T>
-std::vector<T> Node<T>::extract_most_freq_occur_subs(int n, int *frequency) {
-  std::set<std::pair<int, int>> subs;
+std::set<typename std::pair<std::vector<T>, int>, typename Node<T>::cmp> Node<T>::extract_most_freq_occur_subs(int n, int *frequency) {
+  std::set<Substring> subs;
   this->get_substrings(subs, 0, frequency, n);
-  std::vector<T> temp;
-  bool first = true;
-  for (auto [start, len] : subs) {
-    auto _it = first ? temp.begin() : temp.end();
-    first = false;
+  std::set<FrequentSub, cmp> fre_subs;
+  for (auto [ss, freq] : subs) {
+    std::vector<T> temp;
+    auto _it = temp.begin();
+    int start = ss.first, len = ss.second;
     temp.insert(_it, word.begin() + start, word.begin() + start + len);
-    temp.push_back(SEPERATOR);
+    fre_subs.insert({temp, freq});
   }
-  temp.pop_back(); // remove last sepr.
-  return temp;
+  return fre_subs;
 }
 
 template <typename T>
-void Node<T>::get_substrings(std::set<std::pair<int, int>> &subs,
+void Node<T>::get_substrings(std::set<Substring> &subs,
                              int string_dept, int *most_frequent, int minimum) {
   for (auto [_, node] : this->children) {
     node->get_substrings(subs, string_dept + node->edge_length(), most_frequent,
                          minimum);
   }
-  if (this->is_root() || string_dept < minimum ||
+  if (string_dept < minimum ||
       (word[this->end()] == SEPERATOR && string_dept == minimum))
     return;
   int len = this->is_leaf()
                 ? string_dept - 1
                 : string_dept; // inorder to remove the last seperator count.
-  if (this->occurences_count == *most_frequent)
-    subs.insert({this->end() - string_dept + 1, len});
-  if (this->occurences_count > *most_frequent) {
+  
+  if (this->occurences_count > *most_frequent){
     *most_frequent = this->occurences_count;
-    subs = {{this->end() - string_dept + 1, len}};
-  }
+    std::set<Substring> new_subs {{{this->end() - string_dept + 1, len}, *most_frequent}};
+    for(auto [p, freq] : subs){
+      if (freq >= *most_frequent/2)
+        new_subs.insert({p, freq});
+    }
+    subs = new_subs;
+  } 
+  else if (this->occurences_count < *most_frequent){
+    if(this->occurences_count >= *most_frequent/2)
+      subs.insert({{this->end() - string_dept + 1, len}, this->occurences_count});
+  } 
+  else
+    subs.insert({{this->end() - string_dept + 1, len}, this->occurences_count});
 }
