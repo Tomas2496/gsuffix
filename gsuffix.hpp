@@ -352,13 +352,13 @@ void Node<T>::get_substrings(std::set<Substring> &subs,
     *most_frequent = this->occurences_count;
     std::set<Substring> new_subs {{{this->end() - string_dept + 1, len}, *most_frequent}};
     for(auto [p, freq] : subs){
-      if (freq >= *most_frequent/2)
+      if (freq >= *most_frequent/3)
         new_subs.insert({p, freq});
     }
     subs = new_subs;
   } 
   else if (this->occurences_count < *most_frequent){
-    if(this->occurences_count >= *most_frequent/2)
+    if(this->occurences_count >= *most_frequent/3)
       subs.insert({{this->end() - string_dept + 1, len}, this->occurences_count});
   } 
   else
